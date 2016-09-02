@@ -36,6 +36,8 @@ gulp.task('content', function() {
     ).pipe(changed('build'))
     .pipe(htmlmin({
         collapseWhitespace: true,
+        minifyCSS: true,
+        removeComments: true.
     }))
     .pipe(gulp.dest('build'));
 });

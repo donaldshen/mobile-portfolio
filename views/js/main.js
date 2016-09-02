@@ -500,11 +500,11 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
 function updatePositions() {
     frame++;
     window.performance.mark("mark_start_frame");
-    // promote: use getElementsByClassName instead of querySelectorAll
+    // deprecated-opt: use getElementsByClassName instead of querySelectorAll
     var items = document.querySelectorAll('.mover');
-    // promote: extract the dom query out of for-loop
+    // opt: extract the dom query out of for-loop
     var scrollTop = document.body.scrollTop;
-    // promote: pre-calculate the 5 phases
+    // opt: pre-calculate the 5 phases
     var phases = [];
     for (var i = 0; i < 5; i++) {
         phases.push(Math.sin(scrollTop / 1250 + i));
@@ -532,7 +532,7 @@ window.addEventListener('scroll', updatePositions);
 document.addEventListener('DOMContentLoaded', function() {
     var cols = 8;
     var s = 256;
-    // promote: reduce pizzas number from 200 to 20
+    // opt: reduce pizzas number from 200 to 20
     for (var i = 0; i < 20; i++) {
         var elem = document.createElement('img');
         elem.className = 'mover';

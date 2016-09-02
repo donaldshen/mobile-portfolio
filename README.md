@@ -1,10 +1,10 @@
 # Website Performance Optimization portfolio project
 The completely-optimized project was built inside `./build`  
 
-Search `promote` then you can locate all optimizations I made.
+Search `opt` then you can locate all optimizations I made.
 
 ## Part 1: Optimize PageSpeed Insights score for index.html
-- Used html tag like `async` and attribute `media` as many as I could. Check them in index.html. I added comments with 'promote:' above them.
+- Used html tag like `async` and attribute `media` as many as I could. Check them in index.html. I added comments with 'opt:' above them.
 - Used gulp to inline css, minify js/html/image files.
   > Be careful, we should only inline some small css files in index.html. Attempt to inline some huge css files like Bootstrap will cause serious bugs.
 
