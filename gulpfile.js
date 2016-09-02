@@ -3,14 +3,18 @@ var browserSync = require('browser-sync');
 var uglify = require('gulp-uglify');
 var imagemin = require('gulp-imagemin');
 var htmlmin = require('gulp-htmlmin');
-var inlineCss = require('gulp-inline-css');
+var inlinecss = require('gulp-inline-css');
 var changed = require('gulp-changed');
+var cleancss = require('gulp-clean-css');
+var queue = require('streamqueue');
 
 // Paths to various files
 var paths = {
     scripts: ['js/*.js','views/js/*.js'],
-    styles: ['css/*.css','views/css/*.css'],
+    styles: ['css/*.css', 'views/css/*.css'],
     images: ['img/**/*', 'views/images/**/*'],
+    restPages: ['*.html', 'views/*.html', '!index.html'],
+    firstPage: 'index.html',
     content: ['*.html', 'views/*.html']
 };
 
@@ -22,14 +26,24 @@ gulp.task('scripts', function() {
     .pipe(gulp.dest('build'));
 });
 
-// Inline CSS & minifies HTML files and outputs them to build/
+// Inline CSS and minifies HTML files and outputs them to build/
 gulp.task('content', function() {
-    return gulp.src(paths.content, {base: '.'})
-    .pipe(changed('build'))
-    .pipe(inlineCss())
+    return queue(
+        {objectMode: true},
+        gulp.src(paths.firstPage, {base: '.'})
+        .pipe(inlinecss()),
+        gulp.src(paths.restPages, {base: '.'})
+    ).pipe(changed('build'))
     .pipe(htmlmin({
         collapseWhitespace: true,
     }))
+    .pipe(gulp.dest('build'));
+});
+
+// Minifies CSS files
+gulp.task('styles', function () {
+    return gulp.src(paths.styles, {base: '.'})
+    .pipe(cleancss())
     .pipe(gulp.dest('build'));
 });
 
@@ -45,9 +59,10 @@ gulp.task('images', function() {
 gulp.task('content-watch', ['content'], browserSync.reload);
 gulp.task('image-watch', ['images'], browserSync.reload);
 gulp.task('script-watch', ['scripts'], browserSync.reload);
+gulp.task('styles-watch', ['styles'], browserSync.reload);
 
 // Launches a test webserver
-gulp.task('browse', function(){
+gulp.task('default', ['scripts', 'content', 'images', 'styles'], function(){
     browserSync({
         port: 3030,
         server: {
@@ -56,8 +71,7 @@ gulp.task('browse', function(){
         browser: 'google chrome',
     });
     gulp.watch(paths.scripts, ['script-watch']);
-    gulp.watch(paths.content.concat(paths.styles), ['content-watch']);
+    gulp.watch(paths.content, ['content-watch']);
     gulp.watch(paths.images, ['image-watch']);
+    gulp.watch(paths.styles, ['styles-watch']);
 });
-
-gulp.task('default', ['scripts', 'content', 'images', 'browse']);
