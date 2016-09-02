@@ -500,10 +500,12 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
 function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
-
+  // tips: document.getElementsByClass is faster!
   var items = document.querySelectorAll('.mover');
   for (var i = 0; i < items.length; i++) {
+      // tips: here are just 5 possible results
     var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));
+    // tips: css3 hardware acceleration can reduce re-layout(transform/translateX)
     items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
 
@@ -524,6 +526,7 @@ window.addEventListener('scroll', updatePositions);
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
+  // tips: is 200 reasonable? not all pizzas show in page
   for (var i = 0; i < 200; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
