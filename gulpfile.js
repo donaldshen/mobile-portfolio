@@ -4,6 +4,7 @@ var uglify = require('gulp-uglify');
 var imagemin = require('gulp-imagemin');
 var htmlmin = require('gulp-htmlmin');
 var inlineCss = require('gulp-inline-css');
+var changed = require('gulp-changed');
 
 // Paths to various files
 var paths = {
@@ -16,6 +17,7 @@ var paths = {
 // Minifies js files and outputs them to build/
 gulp.task('scripts', function() {
     return gulp.src(paths.scripts, {base: '.'})
+    .pipe(changed('build'))
     .pipe(uglify())
     .pipe(gulp.dest('build'));
 });
@@ -23,6 +25,7 @@ gulp.task('scripts', function() {
 // Inline CSS & minifies HTML files and outputs them to build/
 gulp.task('content', function() {
     return gulp.src(paths.content, {base: '.'})
+    .pipe(changed('build'))
     .pipe(inlineCss())
     .pipe(htmlmin({
         collapseWhitespace: true,
@@ -33,6 +36,7 @@ gulp.task('content', function() {
 // Optimizes our image files and outputs them to build
 gulp.task('images', function() {
     return gulp.src(paths.images, {base: '.'})
+    .pipe(changed('build'))
     .pipe(imagemin())
     .pipe(gulp.dest('build'));
 });
