@@ -4,7 +4,6 @@ var uglify = require('gulp-uglify');
 var imagemin = require('gulp-imagemin');
 var htmlmin = require('gulp-htmlmin');
 var inlinecss = require('gulp-inline-css');
-var changed = require('gulp-changed');
 var cleancss = require('gulp-clean-css');
 var queue = require('streamqueue');
 
@@ -21,7 +20,6 @@ var paths = {
 // Minifies js files and outputs them to build/
 gulp.task('scripts', function() {
     return gulp.src(paths.scripts, {base: '.'})
-    .pipe(changed('build'))
     .pipe(uglify())
     .pipe(gulp.dest('build'));
 });
@@ -33,11 +31,10 @@ gulp.task('content', function() {
         gulp.src(paths.firstPage, {base: '.'})
         .pipe(inlinecss()),
         gulp.src(paths.restPages, {base: '.'})
-    ).pipe(changed('build'))
-    .pipe(htmlmin({
+    ).pipe(htmlmin({
         collapseWhitespace: true,
         minifyCSS: true,
-        removeComments: true.
+        removeComments: true,
     }))
     .pipe(gulp.dest('build'));
 });
@@ -52,16 +49,14 @@ gulp.task('styles', function () {
 // Optimizes our image files and outputs them to build
 gulp.task('images', function() {
     return gulp.src(paths.images, {base: '.'})
-    .pipe(changed('build'))
     .pipe(imagemin())
     .pipe(gulp.dest('build'));
 });
 
 // Watches for changes to our files and executes required scripts
-gulp.task('content-watch', ['content'], browserSync.reload);
+gulp.task('content-watch', ['content', 'styles'], browserSync.reload);
 gulp.task('image-watch', ['images'], browserSync.reload);
 gulp.task('script-watch', ['scripts'], browserSync.reload);
-gulp.task('styles-watch', ['styles'], browserSync.reload);
 
 // Launches a test webserver
 gulp.task('default', ['scripts', 'content', 'images', 'styles'], function(){
@@ -73,7 +68,6 @@ gulp.task('default', ['scripts', 'content', 'images', 'styles'], function(){
         browser: 'google chrome',
     });
     gulp.watch(paths.scripts, ['script-watch']);
-    gulp.watch(paths.content, ['content-watch']);
+    gulp.watch(paths.content.concat(paths.styles), ['content-watch']);
     gulp.watch(paths.images, ['image-watch']);
-    gulp.watch(paths.styles, ['styles-watch']);
 });

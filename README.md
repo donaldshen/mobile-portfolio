@@ -5,8 +5,11 @@ Search `opt` then you can locate all optimizations I made.
 
 ## Part 1: Optimize PageSpeed Insights score for index.html
 - Used html tag like `async` and attribute `media` as many as I could. Check them in index.html. I added comments with 'opt:' above them.
+
 - Used gulp to inline css, minify js/html/image files.
   > Be careful, we should only inline some small css files in index.html. Attempt to inline some huge css files like Bootstrap will cause serious bugs.
+
+- Used local font instead of google font.
 
 My `PageSpeed` score achieves at 96 for mobile.
 
