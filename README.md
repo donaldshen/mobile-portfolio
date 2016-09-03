@@ -7,9 +7,10 @@ Search `opt` then you can locate all optimizations I made.
 - Used html tag like `async` and attribute `media` as many as I could. Check them in index.html. I added comments with 'opt:' above them.
 
 - Used gulp to inline css, minify js/html/image files.
-  > Be careful, we should only inline some small css files in index.html. Attempt to inline some huge css files like Bootstrap will cause serious bugs.
+  > Be careful, we should only inline some small css files into index.html. Attempt to inline some huge css files like Bootstrap will cause serious bugs.
 
 - Used local font instead of google font.
+- Added class to index.html using BEM and refined style.css.
 
 My `PageSpeed` score achieves at 96 for mobile.
 
