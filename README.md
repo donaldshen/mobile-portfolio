@@ -1,7 +1,7 @@
 # Website Performance Optimization portfolio project
 The completely-optimized project was built inside `./build`  
 
-Search `opt` then you can locate all optimizations I made.
+Search `opt` then you can locate all the optimizations I made.
 
 ## Part 1: Optimize PageSpeed Insights score for index.html
 - Used html tag like `async` and attribute `media` as many as I could. Check them in index.html. I added comments with 'opt:' above them.
@@ -23,11 +23,17 @@ gulp
 ```
 
 ## Part 2: Optimize Frames per Second in pizza.html
-#### Inside `DOMContentLoaded` event listener:
-- Reduced pizza number from 200 to 40. Five rows can cover a screen with 1080px height.
+#### Overall
+- Replaced all querySelector(all) by getElementBy(Id/ClassName) accordingly.
+  > getElementsByClassName returns a live NodeList while querySelectorAll returns a static NodeList, which means it must query the dom for changes. That result in forced-synchronous-layout.
 
-- Replaced querySelector by getElementById.
-  > getElementsById returns a live NodeList while querySelector returns a static NodeList, which means it must query the dom for changes. That result in forced-synchronous-layout.
+#### Inside `DOMContentLoaded` event listener:
+- Reduced pizzas in background from 200 to 40. Five rows can cover a screen with 1080px height.
+
+
+
+- ~~Rendered all pizzas in their own layer.~~
+  > Sometimes it made frame-rate better but sometimes it don't. And this opt will increase scripting&composite time for sure. So I decided to deprecate it.
 
 #### Inside `updatePositions`
 - Used getElementsByClassName instead of querySelectorAll.
@@ -35,5 +41,6 @@ gulp
 - Used `transform: translateX()` instead of directly modifying left property. Then add `will-change: transform` to pizza.
   > CSS3 hardware acceleration can reduce re-layout.
 
-- Added `backface-visibility: hidden` to pizza
-  > FYI: I got this idea from this [video](https://classroom.udacity.com/nanodegrees/nd001/parts/00113454012/modules/273584856175462/lessons/5988439100/concepts/68776485930923). Since we only have 2D-transform here I didn't know why we should put this on. There weren't visible changes in the dev tools.
+
+### Inside `resizePizzas`
+- Used new technique to calculate pizza's `newwidth`.
