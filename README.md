@@ -1,5 +1,5 @@
 # Website Performance Optimization portfolio project
-The completely-optimized project was built inside `./build`  
+The completely-optimized project was built inside `./build`.
 
 Search for `opt` then you can locate all the optimizations I made.
 
@@ -35,8 +35,6 @@ My `PageSpeed` score achieves above 96 for mobile.
   > Sometimes it made frame-rate better but sometimes it didn't. And this opt will increase scripting&composite time for sure. So I decided to deprecate it.
 
 #### Inside `updatePositions`
-- Used getElementsByClassName instead of querySelectorAll.
-
 - Used `transform: translateX()` instead of directly modifying left property. Then add `will-change: transform` to pizza.
   > CSS3 hardware acceleration can reduce re-layout.
 
