@@ -500,19 +500,20 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
 function updatePositions() {
     frame++;
     window.performance.mark("mark_start_frame");
-    // deprecated-opt: use getElementsByClassName instead of querySelectorAll
-    var items = document.querySelectorAll('.mover');
+    // opt: use getElementsByClassName instead of querySelectorAll
+    var items = document.getElementsByClassName('mover');
     // opt: extract the dom query out of for-loop
     var scrollTop = document.body.scrollTop;
-    // opt: pre-calculate the 5 phases
+    // opt: pre-calculate all 5 phases
     var phases = [];
     for (var i = 0; i < 5; i++) {
-        phases.push(Math.sin(scrollTop / 1250 + i));
+        phases.push(Math.sin(scrollTop / 1250 + i) * 100);
     }
     for (var i = 0; i < items.length; i++) {
         var phase = phases[i % 5];
-        // tips: css3 hardware acceleration can reduce re-layout(transform/translateX)
-        items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+        // opt: css3 hardware acceleration can reduce re-layout(transform/translateX)
+        // items[i].style.left = items[i].basicLeft + phase + 'px';
+        items[i].style.transform = 'translateX(' + phase + 'px)';
     }
 
     // User Timing API to the rescue again. Seriously, it's worth learning.
@@ -532,16 +533,25 @@ window.addEventListener('scroll', updatePositions);
 document.addEventListener('DOMContentLoaded', function() {
     var cols = 8;
     var s = 256;
-    // opt: reduce pizzas number from 200 to 20
-    for (var i = 0; i < 20; i++) {
+    // opt: replace querySelector
+    var container = document.getElementById("movingPizzas1");
+    // opt: reduce pizzas number from 200
+    for (var i = 0; i < 40; i++) {
         var elem = document.createElement('img');
         elem.className = 'mover';
         elem.src = "images/pizza.png";
         elem.style.height = "100px";
         elem.style.width = "73.333px";
-        elem.basicLeft = (i % cols) * s;
+        // opt: define style.left at the first place and won't change it afterward
+        // elem.basicLeft = (i % cols) * s;
+        elem.style.left = (i % cols) * s + 'px';
+        // opt: add willChange
+        elem.style.willChange = 'transform';
         elem.style.top = (Math.floor(i / cols) * s) + 'px';
-        document.querySelector("#movingPizzas1").appendChild(elem);
+        // opt: not-known
+        elem.style.backfaceVisibility = 'hidden';
+        // opt: extract dom query from loop
+        container.appendChild(elem);
     }
     updatePositions();
 });

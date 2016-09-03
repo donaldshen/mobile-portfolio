@@ -23,8 +23,17 @@ gulp
 ```
 
 ## Part 2: Optimize Frames per Second in pizza.html
-- Reduce pizza number from 200 to 20
-- ~~Use getElementsByClassName instead of querySelectorAll~~
-  > ~~getElementsByClassName returns a live NodeList while querySelectorAll returns a static NodeList, which means it must query the dom for changes. That result in forced-synchronous-layout.~~  
+#### Inside `DOMContentLoaded` event listener:
+- Reduced pizza number from 200 to 40. Five rows can cover a screen with 1080px height.
 
-  > This tip is introduced by this [webcast record](https://classroom.udacity.com/nanodegrees/nd001/parts/00113454012/modules/273584856175462/lessons/5988439100/concepts/68776485930923#). It bring in a bug that the pizzas in background won't move when scrolling.
+- Replaced querySelector by getElementById.
+  > getElementsById returns a live NodeList while querySelector returns a static NodeList, which means it must query the dom for changes. That result in forced-synchronous-layout.
+
+#### Inside `updatePositions`
+- Used getElementsByClassName instead of querySelectorAll.
+
+- Used `transform: translateX()` instead of directly modifying left property. Then add `will-change: transform` to pizza.
+  > CSS3 hardware acceleration can reduce re-layout.
+
+- Added `backface-visibility: hidden` to pizza
+  > FYI: I got this idea from this [video](https://classroom.udacity.com/nanodegrees/nd001/parts/00113454012/modules/273584856175462/lessons/5988439100/concepts/68776485930923). Since we only have 2D-transform here I didn't know why we should put this on. There weren't visible changes in the dev tools.

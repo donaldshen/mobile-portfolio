@@ -59,15 +59,18 @@ gulp.task('image-watch', ['images'], browserSync.reload);
 gulp.task('script-watch', ['scripts'], browserSync.reload);
 
 // Launches a test webserver
-gulp.task('default', ['scripts', 'content', 'images', 'styles'], function(){
+gulp.task('browser', function(){
     browserSync({
-        port: 3030,
+        port: 8000,
         server: {
             baseDir: "build"
         },
         browser: 'google chrome',
     });
-    gulp.watch(paths.scripts, ['script-watch']);
-    gulp.watch(paths.content.concat(paths.styles), ['content-watch']);
-    gulp.watch(paths.images, ['image-watch']);
+});
+
+gulp.task('default', ['scripts', 'content', 'images', 'styles'], function () {
+    gulp.watch(paths.scripts, ['scripts']);
+    gulp.watch(paths.content.concat(paths.styles), ['content', 'styles']);
+    gulp.watch(paths.images, ['images']);
 });
